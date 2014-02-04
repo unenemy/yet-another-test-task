@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<title>Text Wrapper</title>
+		<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.4.custom.css" />
+		<script src="js/jquery-1.10.2.js"></script>
+		<script src="js/jquery-ui-1.10.4.custom.js"></script>
+	</head>
+	<body>
+		<textarea rows="10" cols="45" id='mytextarea' onmouseup="textWrapper()"></textarea>
+		<script type="text/javascript">
+		function textWrapper()
+		{
+			if(selectText().length > 0)
+			{
+				showDialog();
+			}
+		}
+		function showDialog()
+		{
+			var $myDialog = $('<div></div>')
+				    .html("<input type='radio' value='a' name='options'>A \
+				    	<input type='radio' value='b' name='options'>B \
+				    	<input type='radio' value='c' name='options'>C")
+				    .dialog({
+				    autoOpen: false,
+				    title: 'Select an option:',
+				    buttons: {
+				      "OK": function () {
+				        $(this).dialog("close");
+				        option = $(this).find('input[name=options]:checked').val();
+				        wrap(option);
+				      },
+				      "Cancel": function () {
+				        $(this).dialog("close");
+				        wrap(undefined);
+				      }
+				    }
+				  });
+				$myDialog.dialog('open');
+		}
+		function wrap(tag){
+        	if(tag != undefined)
+        	{
+        		textarea = $("#mytextarea");
+        		start = $("#mytextarea").get(0).selectionStart;
+        		end = $("#mytextarea").get(0).selectionEnd;
+        		text = textarea.val();
+        		newText = text.substring(0, start) + "<" + tag + ">" + text.substring(start, end) + "</" + tag + ">" + text.substring(end, text.length)
+        		textarea.val(newText);
+        	}
+    	}
+		function selectText()
+		{
+			var textComponent = document.getElementById('mytextarea');
+			selectedText = "";
+			if (textComponent.selectionStart != undefined)
+			{
+				var startPos = textComponent.selectionStart;
+				var endPos = textComponent.selectionEnd;
+				selectedText = textComponent.value.substring(startPos, endPos)
+			}
+			return selectedText;
+		}
+		</script>
+	</body>
+</html>
